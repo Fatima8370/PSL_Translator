@@ -9,7 +9,7 @@ NUM_HANDS = 2
 MIN_HAND_DETECTION_CONFIDENCE = 0.5
 MIN_HAND_PRESENCE_CONFIDENCE = 0.8
 
-CAMERA_INDEX = 0
+CAMERA_INDEX = 1
 
 # Skeleton connections — index pairs matching MediaPipe's 21-point hand model.
 # Kept here (not hardcoded in a drawing function) so future changes to hand

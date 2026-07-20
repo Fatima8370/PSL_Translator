@@ -8,6 +8,8 @@ import cv2
 import config
 from landmarker_service import HandLandmarkerService
 from drawing import draw_hand_landmarks
+from feature_extraction import extract_normalized_landmarks
+
 
 
 def main():
@@ -37,7 +39,13 @@ def main():
 
         if detection_result.hand_landmarks:
             for hand_landmarks in detection_result.hand_landmarks:
+                
                 frame = draw_hand_landmarks(frame, hand_landmarks, w, h)
+
+                feature_vector = extract_normalized_landmarks(hand_landmarks)
+                print(feature_vector.shape, feature_vector[24:27])
+                            
+                
         else:
             # No hand detected this frame — nothing to draw, loop continues normally.
             pass
