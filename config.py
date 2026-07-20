@@ -11,6 +11,9 @@ MIN_HAND_PRESENCE_CONFIDENCE = 0.8
 
 CAMERA_INDEX = 1
 
+DATASET_ROOT = "dataset"
+BURST_DURATION_SECONDS = 5
+
 # Skeleton connections — index pairs matching MediaPipe's 21-point hand model.
 # Kept here (not hardcoded in a drawing function) so future changes to hand
 # topology or a different landmark model don't require touching draw logic.

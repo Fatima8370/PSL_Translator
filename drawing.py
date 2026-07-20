@@ -7,6 +7,24 @@ swap detection backends, this file doesn't change at all.
 import cv2
 import config
 
+def draw_recording_overlay(frame, label_text, seconds_remaining):
+    """
+    Clean, fixed-position overlay shown only DURING an active burst capture.
+    Separate from draw_hand_landmarks — this is status text, not skeleton data.
+    """
+    padding = 10
+    bar_height = 60
+
+    overlay = frame.copy()
+    cv2.rectangle(overlay, (0, 0), (frame.shape[1], bar_height), (20, 20, 20), -1)
+    cv2.addWeighted(overlay, 0.6, frame, 0.4, 0, frame)
+
+    cv2.putText(frame, f"RECORDING: {label_text}", (padding, 25),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 220), 2)
+    cv2.putText(frame, f"Time left: {seconds_remaining:.1f}s", (padding, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.55, (255, 255, 255), 1)
+
+    return frame
 
 def draw_hand_landmarks(frame, hand_landmarks, frame_width, frame_height):
     """
