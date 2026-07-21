@@ -71,9 +71,13 @@ def run_burst_capture(cap, service, dialect, label):
         if detection_result.hand_landmarks:
             for hand_landmarks in detection_result.hand_landmarks:
                 frame = draw_hand_landmarks(frame, hand_landmarks, w, h)
-
+            
             feature_vector = extract_two_hand_feature_vector(detection_result)
             rows_buffer.append(feature_vector)
+        
+            num_detected = len(detection_result.hand_landmarks) if detection_result.hand_landmarks else 0
+            print(f"Hands detected: {num_detected}")
+
         else:
             # No hand this frame — explicitly skip, do NOT record a garbage row.
             pass
