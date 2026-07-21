@@ -4,12 +4,12 @@ Change thresholds/paths here — never hunt through logic files for a magic numb
 """
 
 MODEL_PATH = "hand_landmarker.task"
-
+MODEL_PATH_CLASSIFIER = "psl_classifier.joblib"
 NUM_HANDS = 2
 MIN_HAND_DETECTION_CONFIDENCE = 0.5
-MIN_HAND_PRESENCE_CONFIDENCE = 0.8
+MIN_HAND_PRESENCE_CONFIDENCE = 0.6
 
-CAMERA_INDEX = 1
+CAMERA_INDEX = 0
 
 DATASET_ROOT = "dataset"
 BURST_DURATION_SECONDS = 5
