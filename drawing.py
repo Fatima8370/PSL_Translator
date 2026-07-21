@@ -47,3 +47,43 @@ def draw_hand_landmarks(frame, hand_landmarks, frame_width, frame_height):
         cv2.circle(frame, (cx, cy), 5, (0, 255, 0), -1)
 
     return frame
+
+
+def draw_prediction_box(frame, predicted_label, confidence):
+    """
+    Semi-transparent box, fixed to the top-right corner, showing the
+    model's current predicted letter/number and its confidence.
+    Kept separate from draw_recording_overlay (which is collection-only UI).
+    """
+    box_width = 160
+    box_height = 90
+    margin = 15
+
+    frame_h, frame_w, _ = frame.shape
+    x1 = frame_w - box_width - margin
+    y1 = margin
+    x2 = frame_w - margin
+    y2 = margin + box_height
+
+    overlay = frame.copy()
+    cv2.rectangle(overlay, (x1, y1), (x2, y2), (30, 30, 30), -1)
+    # 0.45 opacity keeps the camera feed clearly visible behind the box.
+    cv2.addWeighted(overlay, 0.45, frame, 0.55, 0, frame)
+
+    # Border for definition against busy backgrounds.
+    cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 255, 255), 1)
+
+    label_text = predicted_label if predicted_label is not None else "-"
+
+    # Centered-ish letter, large and clear.
+    cv2.putText(frame, label_text, (x1 + 55, y1 + 45),
+                cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 120), 3)
+
+    if confidence is not None:
+        conf_text = f"{confidence * 100:.0f}%"
+        cv2.putText(frame, conf_text, (x1 + 10, y1 + 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+    else:
+        pass
+
+    return frame
