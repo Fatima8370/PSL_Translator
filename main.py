@@ -1,15 +1,8 @@
-"""
-Entry point. Owns the webcam loop and OpenCV window lifecycle.
-Delegates detection to HandLandmarkerService and rendering to drawing.py —
-this file should stay thin; it's just the conductor.
-"""
-
 import cv2
 import config
 from landmarker_service import HandLandmarkerService
-from drawing import draw_hand_landmarks
-from feature_extraction import extract_normalized_landmarks
-
+from drawing import draw_hand_landmarks, draw_prediction_box
+from prediction_service import PredictionService
 
 
 def main():
@@ -22,6 +15,7 @@ def main():
         print("[INFO] Webcam initialized successfully.")
 
     service = HandLandmarkerService()
+    predictor = PredictionService(config.MODEL_PATH_CLASSIFIER)
     print("Camera running. Press 'q' to close window.")
 
     while cap.isOpened():
@@ -39,16 +33,12 @@ def main():
 
         if detection_result.hand_landmarks:
             for hand_landmarks in detection_result.hand_landmarks:
-                
                 frame = draw_hand_landmarks(frame, hand_landmarks, w, h)
-
-                feature_vector = extract_normalized_landmarks(hand_landmarks)
-                print(feature_vector.shape, feature_vector[24:27])
-                            
-                
         else:
-            # No hand detected this frame — nothing to draw, loop continues normally.
             pass
+
+        predicted_label, confidence = predictor.predict_from_detection(detection_result)
+        frame = draw_prediction_box(frame, predicted_label, confidence)
 
         cv2.imshow('PSL Translator - Hand Tracking', frame)
 
